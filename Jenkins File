@@ -1,0 +1,44 @@
+pipeline{
+    agent any
+    tools
+    {
+        maven 'mymaven'
+    }
+    triggers{
+        pollSCM('* * * * *')
+    }
+    stages
+    {
+    stage('checkout Code')
+        {
+            steps
+            {
+                git 'https://github.com/Saquib71/DevOpsCodeDemo.git'
+            }
+        }
+    stage('Compile Code')
+    {
+         steps
+         {
+             sh 'mvn compile'
+         }
+    }
+     
+    stage('Test Code')
+    {
+         steps
+         {
+             echo "testing the code using maven surefire"
+             sh 'mvn test'
+         }
+    }
+    stage('Build Code')
+    {
+         steps
+         {
+             echo"Generating Artifacts"
+             sh 'mvn package'
+         }
+    }
+     }
+}
